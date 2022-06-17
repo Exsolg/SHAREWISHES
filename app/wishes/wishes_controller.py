@@ -30,10 +30,10 @@ def add_wish():
     wish.user_id = current_user.id
     if not form['title'] or not form['description']:
         abort(400)
-        
+
     if request.files.get('add-image'):
         wish.image = save_image(request.files['add-image'], current_user.nick)
-        
+
     for key, value in form.items():
         if key == 'add-image':
             continue
