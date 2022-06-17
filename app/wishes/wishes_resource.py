@@ -10,17 +10,19 @@ parser.add_argument('user_id', required=True, type=int)
 parser.add_argument('image', required=False, type=str)
 parser.add_argument('link', required=False, type=str)
 parser.add_argument('description', required=False, type=str)
-parser.add_argument('is_private', required=False, type=int)
+parser.add_argument('is_private', required=True, type=int)
 
 
 def edit_wish_arguments():
     parser.replace_argument('title', required=False)
     parser.replace_argument('user_id', required=False)
+    parser.replace_argument('is_private', required=False)
 
 
 def add_wish_arguments():
     parser.replace_argument('title', required=True)
     parser.replace_argument('user_id', required=True)
+    parser.replace_argument('is_private', required=True)
 
 
 def get_wish_or_abort(wishes_id):
@@ -50,7 +52,7 @@ class WishesResource(Resource):
             image=args['image'],
             link=args['link'],
             description=args['description'],
-            is_private=args['is_private']
+            is_private=bool(args['is_private'])
         )
         db.session.add(wish)
         db.session.commit()

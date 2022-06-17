@@ -103,7 +103,7 @@ def profile(username):
 
 @user_routes.route('/download_file', methods=["POST"])
 def change_photo():
-    path = os.path.join('sharewishes', 'app', 'static', 'img', 'users', current_user.nick)
+    path = os.path.join('app', 'static', 'img', 'users', current_user.nick)
     image = request.files["file"]
     ext = os.path.splitext(image.filename)[-1]
 

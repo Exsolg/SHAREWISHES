@@ -3,7 +3,7 @@ from uuid import uuid4
 
 
 def save_image(image, nick):
-    path = os.path.join('sharewishes', 'app', 'static', 'img',
+    path = os.path.join('app', 'static', 'img',
                                 'users', nick, 'wishes')
     filename = f"{uuid4()}{os.path.splitext(image.filename)[1]}"
     if not os.path.exists(path):

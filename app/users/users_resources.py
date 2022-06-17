@@ -51,4 +51,5 @@ class UsersListResource(Resource):
         user.set_password(args['password'])
         db.session.add(user)
         db.session.commit()
-        return jsonify(user.to_dict(only=('id', 'surname', 'name', 'nick', 'age', 'email')))
+        return jsonify(user.to_dict(
+            only=('id', 'surname', 'name', 'nick', 'age', 'email')))
