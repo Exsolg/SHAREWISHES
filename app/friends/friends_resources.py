@@ -44,6 +44,11 @@ class FriendsResource(Resource):
         return jsonify({'success': 'OK'})
 
     def post(self, user_id, friend_id):
+        user = db.session.query(User).get(user_id)
+        friend = db.session.query(User).get(user_id)
+        if not user or not friend:
+            abort(404, message=f"Users not exist")
+
         friend = Friend(
             user_id=user_id,
             friend_id=friend_id
