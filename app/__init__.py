@@ -11,11 +11,12 @@ from app.users.user_controller import user_routes
 from app.wishes.wishes_controller import wish_routes
 from app.friends.friend_controller import friend_routes
 from app.consts import *
+import os
 
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config.Config')
+    app.config.from_object(os.environ["APP_SETTINGS"])
     app.register_blueprint(route)
     app.register_blueprint(user_routes)
     app.register_blueprint(wish_routes)
