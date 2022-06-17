@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link href={{url_for("static", filename="style/style.css")}} type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<div class="modal" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit wish</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm" action="" method="post" enctype="multipart/form-data">
+          {{ edit_form.hidden_tag() }}
+          <div class="d-none">
+            {{ edit_form.id(class="form-control") }}
+          </div>
+          <p>
+              {{ edit_form.title.label }}
+              {{ edit_form.title(class="form-control") }}
+              {% for error in edit_form.title.errors %}
+                  <p class="alert alert-danger" role="alert">
+                      {{ error }}
+                  </p>
+              {% endfor %}
+          </p>
+          <p>
+            {{ edit_form.description.label }}
+            {{ edit_form.description(class="form-control") }}
+            {% for error in edit_form.description.errors %}
+              <p class="alert alert-danger" role="alert">
+                  {{ error }}
+              </p>
+            {% endfor %}
+          </p>
+          <p>
+            {{ edit_form.link.label }}
+            {{ edit_form.link(class="form-control", type="url") }}
+            {% for error in edit_form.link.errors %}
+              <p class="alert alert-danger" role="alert">
+                  {{ error }}
+              </p>
+            {% endfor %}
+          </p>
+          <p>
+            {{ edit_form.image.label }}
+            {{ edit_form.image(class="form-control", type="file", accept="image/png, image/gif, image/jpeg") }}
+            {% for error in edit_form.image.errors %}
+              <p class="alert alert-danger" role="alert">
+                  {{ error }}
+              </p>
+            {% endfor %}
+          </p>
+          <p>
+            {{ edit_form.is_private(type="checkbox") }} {{ edit_form.is_private.label }}
+          </p>
+          <p>{{ edit_form.submit(type="submit", class="btn btn-primary") }}</p>
+          {{message}}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-2">
+        {% if user_info.image %}
+        <img class="profile_img" src={{url_for("static", filename="img/users/" + user_info.nick + "/ava.png")}} alt="student dp">
+        {%else%}
+        <img class="profile_img" src={{url_for("static", filename="img/site/ava.png")}} alt="student dp">
+        {%endif%}
+    </div>
+    <div class="col-md-3">
+      <div class="card-body">
+        <p class="mb-0"><strong class="pr-1">Nick:</strong> @{{user_info.nick}}</p>
+        <p class="mb-0"><strong class="pr-1">Birth day:</strong> {{user_info.age}}</p>
+        <div class="mb-0"><strong class="pr-1">Description:</strong> {{user_info.description}}</div>
+      </div>
+    </div>
+    {% if current_user.is_authenticated and current_user.id == user_info.id %}
+    <div class="col-md-2 profile-usermenu ms-auto my-auto">
+        <p>
+            <label for="inp" class="card shadow-sm btn me-4 my-2">
+                <i class="glyphicon glyphicon-user"></i>
+                Загрузить фото
+                <input id="inp" name="img_input" type="file" accept="image/png, image/gif, image/jpeg">
+            </label>
+        </p>
+        <p>
+            <a class="card shadow-sm btn me-4 my-2" href="/settings">
+            <i class="glyphicon glyphicon-user"></i>
+            Настройки аккаунта
+            </a>
+        </p>
+        <p>
+            <a class="card shadow-sm btn me-4 my-2" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="glyphicon glyphicon-ok"></i>
+            Добавить желание </a>
+        </p>
+    </div>
+    {% elif current_user.is_authenticated %}
+    <div class="col-md-2 profile-usermenu ms-auto my-auto">
+      <ul class="nav">
+          <li>
+              {% if not friend or (friend.friend_id == current_user.id and friend.relation_type == 'not_approved') %}
+              <a class="profileButton card shadow-sm btn ms-2 my-2" href="/add_friend/{{ user_info.nick }}">
+                  <i class="glyphicon glyphicon-user"></i>
+                  Добавить в друзья
+              </a>
+              {% elif friend.relation_type == 'not_approved'%}
+              <a class="profileButton card shadow-sm btn ms-2 my-2" href="/delete_friend/{{ user_info.nick }}">
+                  <i class="glyphicon glyphicon-user"></i>
+                  Заявка отправлена
+              </a>
+              {% elif friend.relation_type == 'friend'%}
+              <a class="profileButton card shadow-sm btn ms-2 my-2" href="/delete_friend/{{ user_info.nick }}">
+                  <i class="glyphicon glyphicon-user"></i>
+                  Удалить из друзей
+              </a>
+              {% endif %}
+          </li>
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="col-lg-8 w-100" >
+    <div class="card shadow-sm">
+      <div class="card-header bg-transparent border-0">
+        <h3 class="mb-0"><i class="far fa-clone pr-1"></i>WISHES</h3>
+      </div>
+    </div>
+</div>
+<br>
+{% for wishes in wish_list %}
+<div class="card-deck d-flex">
+    <div class="w-100">
+      <div class="row d-flex justify-content-center">
+        {% for wish in wishes %}
+        <div class="col-lg-4 mb-3 d-flex card-sz">
+          <div class="card w-100">
+            {% if wish.image %}<img class="card-img-top card-img-scale" src={{ wish.image }} alt="Card image cap">{% endif %}
+            <div class="card-body d-flex flex-column justify-content-end">
+              {% if wish.link %}
+              <a target="_blank" href={{wish.link}} class="text-decoration-none text-dark">
+                <h5 class="card-title">
+                  {{ wish.title }}
+                </h5>
+              </a>
+              {% else %}
+              <h5 class="card-title">{{ wish.title }}</h5>
+              {% endif%}
+              <p class="card-text">{{ wish.description }}</p>
+            </div>
+            <div class="card-footer d-flex">
+              <small class="text-muted my-auto">{{ wish.created_date }}</small>
+              {% if current_user.id == wish.user_id %}
+              <button data-id={{wish.id}} type="button" class="btn btn-primary-outline ms-auto editWishButton"><i class="bi bi-pencil text-success"></i></button>
+              <button type="button" class="btn btn-primary-outline" onClick="removeWish({{ wish.id }})"><i class="bi bi-trash3 text-danger"></i></button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+</div>
+</br>
+{% endfor %}
+{% endblock %}
+
+
+{% block script %}
+<script src={{url_for("static", filename="js/wishes.js")}}></script>
+{% endblock %}

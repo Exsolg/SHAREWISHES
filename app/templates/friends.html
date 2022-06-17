@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link href={{url_for("static", filename="style/style.css")}} type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="col-lg-8 w-100" >
+    <div class="card shadow-sm">
+      <div class="card-header bg-transparent border-0">
+        <h3 class="mb-0"><i class="far fa-clone pr-1"></i> MY FRIENDS </h3>
+      </div>
+    </div>
+</div>
+<br>
+{% for friend in friends %}
+
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-1 p-3">
+        <div class="photo">
+            {% if friend.image %}
+            <img class="profile" src={{url_for("static", filename="img/users/" + friend.nick + "/ava.png")}} alt="student dp">
+            {%else%}
+            <img class="profile" src={{url_for("static", filename="img/site/ava.png")}} alt="student dp">
+            {%endif%}
+        </div>
+    </div>
+    <div class="col-md-3 ms-5 d-flex">
+      <div class="card-body">
+        <a class="mb-0 text-decoration-none ms-auto" href="/@{{friend.nick}}"> <h5 class="card-title p-0 m-0" >@{{friend.nick}}</h5></a>
+          <div class="mb-0"><strong>О себе </strong>{{friend.description}}</div>
+          <div class="mb-0"><strong>Друзья </strong>{{count_friends}}</div>
+          <div class="mb-0"><strong>Желания </strong>{{count_wishes}}</div>
+
+      </div>
+    </div>
+    <div class="col-md-2 profile-usermenu ms-auto my-auto">
+        <ul class="nav">
+            <li>
+                <a class="profileButton card shadow-sm btn ms-2 my-2" href="/delete_friend/{{ friend.nick }}">
+                  <i class="glyphicon glyphicon-user"></i>
+                  Удалить из друзей
+              </a>
+            </li>
+        </ul>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+{% endblock %}

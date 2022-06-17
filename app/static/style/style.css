@@ -1,0 +1,45 @@
+.card-img-scale {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-sz {
+    width: 33%;
+    width: calc(100% / 3);
+}
+
+#addButton {
+    width: 10rem;
+}
+
+.profile_img {
+    width: 12rem;
+    height: 15vw;
+    object-fit: cover;
+}
+
+#inp {
+    display: none;
+}
+
+.profileButton {
+    width: 12vw;
+}
+
+.photo {
+  width: 132px;
+  height: 132px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.profile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bi.bi-plus {
+    font-size: 125%;
+}

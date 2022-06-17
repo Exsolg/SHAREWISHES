@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link href={{url_for("static", filename="style/style.css")}} type="text/css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="col-lg-8 w-100" >
+    <div class="card shadow-sm">
+      <div class="card-header bg-transparent border-0">
+        <h3 class="mb-0"><i class="far fa-clone pr-1"></i> NOTIFICATIONS </h3>
+      </div>
+    </div>
+</div>
+<br>
+{% for friend in friends %}
+  <div class="card w-100">
+    {% if friend.image %}
+      <img class="card-img-top card-img-scale" src={{ friend.image }} alt="Card image cap">
+    {% endif %}
+    <div class="card-body d-flex flex-column">
+      <a target="_blank" href=/@{{friend.nick}} class="text-decoration-none text-dark">
+        <h5 class="card-title">
+          {{ friend.nick }}
+        </h5>
+      </a>
+      <p class="card-text">{{ friend.description }}</p>
+      <a class="profileButton card shadow-sm btn ms-2 my-2 ms-auto" href="/add_friend/{{ friend.nick }}">
+          <i class="glyphicon glyphicon-user"></i>
+          Принять заявку
+      </a>
+    </div>
+  </div>
+</br>
+{% endfor %}
+
+{% endblock %}
