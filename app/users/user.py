@@ -1,6 +1,5 @@
 from sqlalchemy import (
     Column,
-    ForeignKey,
     Integer,
     String,
     DateTime
@@ -16,16 +15,6 @@ import datetime
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.query(User).get(user_id)
-
-
-class Friend(db.Model, SerializerMixin):
-    __tablename__ = 'friends'
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, primary_key=True)
-    friend_id = Column(Integer, ForeignKey("users.id"), nullable=False, primary_key=True)
-    relation_type = Column(String(250), nullable=True, default='not_approved')
-
-    def __repr__(self):
-        return f'{self.friend_id}'
 
 
 class User(db.Model, UserMixin, SerializerMixin):

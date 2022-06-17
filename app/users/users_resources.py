@@ -21,8 +21,8 @@ def get_user_or_abort(user_id):
 class UsersResource(Resource):
     def get(self, user_id):
         user = get_user_or_abort(user_id)
-        return jsonify({'users': user.to_dict(
-            only=('surname', 'name', 'nick', 'age', 'email'))})
+        return jsonify(user.to_dict(
+            only=('surname', 'name', 'nick', 'age', 'email')))
 
     def delete(self, user_id):
         user = get_user_or_abort(user_id)
